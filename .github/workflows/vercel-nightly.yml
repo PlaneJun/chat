@@ -1,0 +1,35 @@
+name: "deploy nightly"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "client/web/**"
+      - "client/shared/**"
+      - "client/packages/design/**"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Inject Analytics
+        run: node ./client/web/build/inject-analytics.js
+      - name: Deploy Prod
+        uses: amondnet/vercel-action@master
+        env:
+          VERSION: ${{ env.GITHUB_SHA }}
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
+          working-directory: ./
+          vercel-args: '--prod'
+      - name: Notify to Service
+        uses: muinmomin/webhook-action@v1.0.0
+        with:
+          url: https://paw-server-nightly.moonrailgun.com/api/plugin:com.msgbyte.simplenotify/webhook/callback
+          data: '{"text": "新版前端代码部署完毕", "subscribeId": "${{ secrets.NOTIFY_SUB_ID}}"}'

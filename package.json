@@ -1,0 +1,59 @@
+{
+  "name": "tailchat",
+  "version": "1.4.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently --kill-others --handle-input npm:dev:server npm:dev:web",
+    "dev:web": "cd client/web && pnpm run dev",
+    "dev:server": "cd server && pnpm run dev",
+    "start:service": "cd server && pnpm run start:service",
+    "build": "concurrently npm:build:web npm:build:server && cp -r client/web/dist/* server/dist/public && cp -r client/web/dist/* server/dist/public",
+    "build:web": "cd client/web && pnpm run build",
+    "build:server": "cd server && pnpm run build && echo \"Install server side plugin:\" && pnpm run plugin:install com.msgbyte.tasks com.msgbyte.linkmeta com.msgbyte.github com.msgbyte.simplenotify com.msgbyte.topic com.msgbyte.agora && mkdir -p ./dist/public && cp -r ./public/plugins ./dist/public && cp ./public/registry-be.json ./dist/public",
+    "check:type": "concurrently npm:check:type:client npm:check:type:server",
+    "check:type:client": "cd client/web && tsc --noEmit",
+    "check:type:server": "cd server && tsc --noEmit",
+    "website": "cd website && pnpm dev",
+    "preinstall": "npx only-allow pnpm",
+    "lint:fix": "eslint --fix './**/*.{ts,tsx}'",
+    "prepare": "husky install",
+    "release": "release-it"
+  },
+  "keywords": [],
+  "author": "moonrailgun <moonrailgun@gmail.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "@release-it/conventional-changelog": "^5.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
+    "concurrently": "^7.3.0",
+    "dayjs": "^1.10.6",
+    "esbuild": "^0.15.5",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.0",
+    "fs-extra": "^10.0.0",
+    "gulp-sort": "^2.0.0",
+    "husky": "^8.0.1",
+    "i18next-scanner": "^3.0.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "release-it": "^15.5.1",
+    "typescript": "^4.8.2",
+    "vinyl-fs": "^3.0.3"
+  },
+  "dependencies": {
+    "crc": "^3.8.0",
+    "lodash": "^4.17.21"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "moleculer-minio@2.0.0": "patches/moleculer-minio@2.0.0.patch"
+    }
+  }
+}

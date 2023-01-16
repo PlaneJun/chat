@@ -1,0 +1,12 @@
+packages:
+  - 'apps/*'
+  - 'client/web'
+  - 'client/shared'
+  - 'client/web/plugins/**'
+  - 'client/packages/**'
+  - 'server'
+  - 'server/admin'
+  - 'server/admin-next'
+  - 'server/packages/**'
+  - 'server/plugins/**'
+  - 'website'
