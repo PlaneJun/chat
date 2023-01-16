@@ -9,7 +9,6 @@ import React, { useState } from 'react';
 import { t } from 'tailchat-shared';
 import { useChatInputActionContext } from './context';
 import { uploadMessageImage } from './utils';
-import { uploadMessageFile } from './utils';
 import clsx from 'clsx';
 
 export const ChatInputAddon: React.FC = React.memo(() => {
@@ -32,19 +31,6 @@ export const ChatInputAddon: React.FC = React.memo(() => {
     }
   };
 
-  const handleSendFile = (files: FileList) => {
-    // 发送文件
-    const file = files[0];
-    if (file) {
-      // 发送文件
-      uploadMessageFile(file).then(({url}) => {
-        actionContext.sendMsg(
-          ':open_file_folder:'+url
-        );
-      });
-    }
-  };
-
   const menu = (
     <Menu>
       <FileSelector
@@ -52,13 +38,6 @@ export const ChatInputAddon: React.FC = React.memo(() => {
         onSelected={handleSendImage}
       >
         <Menu.Item>{t('发送图片')}</Menu.Item>
-      </FileSelector>
-
-      <FileSelector
-        fileProps={{ accept: '*/*' }}
-        onSelected={handleSendFile}
-      >
-        <Menu.Item>{t('发送文件')}</Menu.Item>
       </FileSelector>
 
       {pluginChatInputActions.map((item, i) => (

@@ -53,7 +53,6 @@ export class GroupPanel {
   @prop()
   parentId?: string; // 父节点id
 
-
   /**
    * 面板类型:
    *  0 文本频道
@@ -112,8 +111,6 @@ export class Group extends TimeStamps implements Base {
   @prop()
   avatar?: string;
 
-
-
   @prop({
     ref: () => User,
   })
@@ -147,8 +144,6 @@ export class Group extends TimeStamps implements Base {
   @prop({ default: () => ({}) })
   config: object;
 
-  @prop()
-  lock: boolean;
   /**
    * 创建群组
    */
@@ -184,7 +179,6 @@ export class Group extends TimeStamps implements Base {
     });
 
     // NOTE: Expression produces a union type that is too complex to represent.
-    const lock = false;//添加房锁:默认不锁房
     const res = await this.create({
       name,
       panels,
@@ -195,7 +189,6 @@ export class Group extends TimeStamps implements Base {
           userId: owner,
         },
       ],
-      lock
     });
 
     return res;

@@ -22,8 +22,6 @@ import {
 } from 'tailchat-server-sdk';
 import moment from 'moment';
 
-
-
 interface GroupService
   extends TcService,
     TcDbService<GroupDocument, GroupModel> {}
@@ -216,6 +214,7 @@ class GroupService extends TcService {
     const textPanelIds = group.panels
       .filter((p) => p.type === GroupPanelType.TEXT)
       .map((p) => p.id);
+
     return textPanelIds;
   }
 
@@ -327,7 +326,7 @@ class GroupService extends TcService {
     const userId = ctx.meta.userId;
     const t = ctx.meta.t;
     if (
-      !['name', 'avatar', 'panels', 'roles','lock', 'fallbackPermissions'].includes(
+      !['name', 'avatar', 'panels', 'roles', 'fallbackPermissions'].includes(
         fieldName
       )
     ) {
@@ -435,14 +434,6 @@ class GroupService extends TcService {
       throw new Error('已加入该群组');
     }
 
-    const groupLock = await this.adapter.model
-      .findById(groupId,{lock:1}).exec();
-
-    if (groupLock === null || groupLock === undefined) {
-      throw new Error('群组权限出现问题');
-    }
-    console.log('groupLock=',groupLock);
-
     const doc = await this.adapter.model
       .findByIdAndUpdate(
         groupId,
@@ -493,9 +484,6 @@ class GroupService extends TcService {
       await ctx.call('gateway.leaveRoom', {
         roomIds: [groupId],
       });
-
-
-
     } else {
       // 是普通群组成员
       const doc = await this.adapter.model

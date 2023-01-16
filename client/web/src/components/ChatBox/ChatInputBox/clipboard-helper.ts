@@ -31,33 +31,4 @@ export class ClipboardHelper {
     }
     return false;
   }
-
-  hasFile(): File | false {
-    const fd = this.isPasteFile(this.data.items);
-    if (fd === false) {
-      return false;
-    }
-
-    const file = fd.getAsFile();
-    if (file === null) {
-      return false;
-    }
-
-    return file;
-  }
-
-
-  private isPasteFile(items: DataTransferItemList): DataTransferItem | false {
-    let i = 0;
-    let item: DataTransferItem;
-    while (i < items.length) {
-      item = items[i];
-      
-      if (item.type.indexOf('image') === -1) {
-        return item;
-      }
-      i++;
-    }
-    return false;
-  }
 }

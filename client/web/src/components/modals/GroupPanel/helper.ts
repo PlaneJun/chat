@@ -10,6 +10,7 @@ export function buildDataFromValues(values: GroupPanelValues) {
   let panelType: number;
   let provider: string | undefined = undefined;
   let pluginPanelName: string | undefined = undefined;
+
   if (typeof type === 'string') {
     // 创建一个来自插件的面板
     const panelName = type;

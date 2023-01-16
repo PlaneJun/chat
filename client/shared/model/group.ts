@@ -59,7 +59,6 @@ export interface GroupInfo {
   panels: GroupPanel[];
   roles: GroupRole[];
   config?: Partial<Record<GroupConfigNames, any>>;
-  lock?:boolean | false;
   /**
    * 所有人的权限列表
    * 为群组中的最低权限
@@ -131,8 +130,7 @@ type AllowedModifyField =
   | 'avatar'
   | 'panels'
   | 'roles'
-  | 'fallbackPermissions'
-  | 'lock';
+  | 'fallbackPermissions';
 export async function modifyGroupField(
   groupId: string,
   fieldName: AllowedModifyField,
@@ -306,7 +304,7 @@ export async function createGroupPanel(
 }
 
 /**
- * 修改群组面板
+ * 创建群组面板
  */
 export async function modifyGroupPanel(
   groupId: string,
