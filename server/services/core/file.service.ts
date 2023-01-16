@@ -219,8 +219,8 @@ class FileService extends TcService {
     const { url, objectName } = await this.persistFile(
       ctx,
       tmpObjectName,
-      etag,
-      ext
+      filename.replace(" ","%20"),
+      etag
     );
 
     span.finish();
@@ -238,8 +238,8 @@ class FileService extends TcService {
   async persistFile(
     ctx: TcContext,
     tmpObjectName: string,
-    etag: string,
-    ext: string
+    orignFileName: string,
+    etag: string
   ): Promise<{
     url: string;
     objectName: string;
@@ -248,7 +248,7 @@ class FileService extends TcService {
     const userId = ctx.meta.userId;
 
     // 存储在上传者自己的子目录
-    const objectName = `files/${userId}/${etag}${ext}`;
+    const objectName = `files/${userId}/${etag}_${orignFileName}`;
 
     try {
       await this.actions['copyObject'](

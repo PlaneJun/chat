@@ -9,7 +9,7 @@ import {
   getCachedGroupInviteInfo,
   t,
   useAsync,
-  useAsyncRequest,
+  useAsyncRequest
 } from 'tailchat-shared';
 import { SuccessModal } from './SuccessModal';
 
@@ -50,6 +50,7 @@ export const JoinBtn: React.FC<Props> = React.memo((props) => {
   if (loading) {
     return null;
   }
+
 
   if (isJoined) {
     return (

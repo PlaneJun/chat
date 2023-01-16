@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect, useMemo } from 'react';
-import { t, useGroupInfo, useGroupPanelInfo } from 'tailchat-shared';
+import { t, useGroupInfo, useGroupPanelInfo,modifyGroupField} from 'tailchat-shared';
 import _isNil from 'lodash/isNil';
 import { MembersPanel } from './MembersPanel';
 import { CommonPanelWrapper } from '../common/Wrapper';
@@ -35,7 +35,6 @@ function useRecordGroupPanel(groupId: string, panelId: string) {
 interface GroupPanelWrapperProps extends PropsWithChildren {
   groupId: string;
   panelId: string;
-
   /**
    * 是否显示面板头
    */
@@ -43,7 +42,8 @@ interface GroupPanelWrapperProps extends PropsWithChildren {
 }
 export const GroupPanelWrapper: React.FC<GroupPanelWrapperProps> = React.memo(
   (props) => {
-    const { groupId, panelId } = props;
+    const groupId = props.groupId;
+    const panelId = props.panelId;
     const groupInfo = useGroupInfo(groupId);
     const panelInfo = useGroupPanelInfo(groupId, panelId);
     const groupMemberCount = (groupInfo?.members ?? []).length;
@@ -60,6 +60,9 @@ export const GroupPanelWrapper: React.FC<GroupPanelWrapperProps> = React.memo(
       [groupId, panelId]
     );
 
+    if(_isNil(groupInfo)){
+      return null;
+    }
     if (_isNil(panelInfo)) {
       return null;
     }
@@ -101,6 +104,26 @@ export const GroupPanelWrapper: React.FC<GroupPanelWrapperProps> = React.memo(
                   }
                 />
               )),
+
+            //添加锁房
+            <IconBtn
+              key="lock"
+              title={t('锁定房间')}
+              shape="square"
+              icon={groupInfo.lock?"material-symbols:lock-outline":"material-symbols:lock-open-outline"}
+              iconClassName="text-2xl"
+              onClick={async (e) =>{
+                if(groupInfo.lock===true)
+                {
+                  e.target.getElementsByTagName("path")[0].setAttribute('d','M6 22q-.825 0-1.412-.587Q4 20.825 4 20V10q0-.825.588-1.413Q5.175 8 6 8h1V6q0-2.075 1.463-3.538Q9.925 1 12 1t3.538 1.462Q17 3.925 17 6v2h1q.825 0 1.413.587Q20 9.175 20 10v10q0 .825-.587 1.413Q18.825 22 18 22Zm0-2h12V10H6v10Zm6-3q.825 0 1.413-.587Q14 15.825 14 15q0-.825-.587-1.413Q12.825 13 12 13q-.825 0-1.412.587Q10 14.175 10 15q0 .825.588 1.413Q11.175 17 12 17ZM9 8h6V6q0-1.25-.875-2.125T12 3q-1.25 0-2.125.875T9 6ZM6 20V10v10Z')
+                  await modifyGroupField(props.groupId,'lock',false);
+                }
+                else{
+                  e.target.getElementsByTagName("path")[0].setAttribute('d','M6 8h9V6q0-1.25-.875-2.125T12 3q-1.25 0-2.125.875T9 6H7q0-2.075 1.463-3.538Q9.925 1 12 1t3.538 1.462Q17 3.925 17 6v2h1q.825 0 1.413.587Q20 9.175 20 10v10q0 .825-.587 1.413Q18.825 22 18 22H6q-.825 0-1.412-.587Q4 20.825 4 20V10q0-.825.588-1.413Q5.175 8 6 8Zm0 12h12V10H6v10Zm6-3q.825 0 1.413-.587Q14 15.825 14 15q0-.825-.587-1.413Q12.825 13 12 13q-.825 0-1.412.587Q10 14.175 10 15q0 .825.588 1.413Q11.175 17 12 17Zm-6 3V10v10Z')
+                  await modifyGroupField(props.groupId,'lock',true);
+                }
+              }}
+            />,              
             <IconBtn
               key="open"
               title={t('在新窗口打开')}

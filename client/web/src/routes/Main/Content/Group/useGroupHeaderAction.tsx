@@ -25,6 +25,7 @@ export function useGroupHeaderAction(groupId: string) {
     );
   }, [groupId]);
 
+
   const handleInviteUser = useCallback(() => {
     openModal(<CreateGroupInvite groupId={groupId} />);
   }, [groupId]);

@@ -1,5 +1,6 @@
 import { closeModal, openModal } from '@/components/Modal';
 import { ImageUploadPreviewer } from '@/components/modals/ImageUploadPreviewer';
+import { FileUploadPreviewer } from '@/components/modals/FileUploadPreviewer';
 import { compressImage, fileToDataUrl } from '@/utils/file-helper';
 import React from 'react';
 import { uploadFile } from 'tailchat-shared';
@@ -50,3 +51,32 @@ export function uploadMessageImage(image: File): Promise<{
     });
   });
 }
+
+  /**
+ * 上传文件，并返回文件地址
+ */
+export function uploadMessageFile(fd: File): Promise<{
+  url: string;
+}> {
+  return new Promise((resolve) =>{
+    fileToDataUrl(fd).then((fileLocalUrl) => {
+      const key = openModal(
+        <FileUploadPreviewer
+          onCancel={() => {
+            closeModal(key);
+          }}
+          onConfirm={async () => {
+            const fileInfo = await uploadFile(fd);
+            const FileRemoteUrl = fileInfo.url;
+
+            resolve({
+              url: FileRemoteUrl
+            });
+            closeModal(key);
+          }}
+        />
+      );
+    });
+  });
+}
+
