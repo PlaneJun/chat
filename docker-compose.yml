@@ -123,10 +123,12 @@ services:
   mongo:
     image: mongo:4
     restart: on-failure
+    ports:
+      - 27017:27017
     volumes:
       - data:/data/db
     networks:
-      - internal
+      - internal7
 
   # 数据缓存与中转通讯
   redis:

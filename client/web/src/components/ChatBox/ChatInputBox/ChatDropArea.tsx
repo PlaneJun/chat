@@ -4,6 +4,7 @@ import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { useChatInputActionContext } from './context';
 import { uploadMessageImage } from './utils';
+import { uploadMessageFile } from './utils';
 import { getMessageTextDecorators } from '@/plugin/common';
 import { Icon } from 'tailchat-design';
 
@@ -18,6 +19,17 @@ export const ChatDropArea: React.FC = React.memo(() => {
       uploadMessageImage(img).then(({ url, width, height }) => {
         actionContext?.sendMsg(
           getMessageTextDecorators().image(url, { width, height })
+        );
+      });
+    }
+
+    const _files = files.filter((f) => f.type.indexOf('image/') === -1);
+    if (_files.length > 0) {
+      // 目前只取一张
+      const f = _files[0];
+      uploadMessageFile(f).then(({url}) => {
+        actionContext.sendMsg(
+          ':open_file_folder:'+url
         );
       });
     }

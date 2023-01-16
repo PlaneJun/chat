@@ -10,6 +10,7 @@ import {
   t,
   useAsync,
   useAsyncRequest,
+  getCachedBaseGroupInfo
 } from 'tailchat-shared';
 import { SuccessModal } from './SuccessModal';
 
@@ -38,9 +39,11 @@ export const JoinBtn: React.FC<Props> = React.memo((props) => {
 
   const [{ loading: joinLoading }, handleJoinGroup] =
     useAsyncRequest(async () => {
+      console.log(await getCachedGroupInviteInfo(props.inviteCode));
       await applyGroupInvite(props.inviteCode);
-
+      
       const invite = await getCachedGroupInviteInfo(props.inviteCode);
+      
       openModal(<SuccessModal groupId={invite?.groupId ?? ''} />, {
         maskClosable: false,
       });
@@ -50,6 +53,7 @@ export const JoinBtn: React.FC<Props> = React.memo((props) => {
   if (loading) {
     return null;
   }
+
 
   if (isJoined) {
     return (

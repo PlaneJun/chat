@@ -152,6 +152,7 @@ class GroupService extends TcService {
       throw new Error(t('群组邀请失效: 群组id为空'));
     }
 
+
     await ctx.call('group.joinGroup', {
       groupId: String(groupId),
     });

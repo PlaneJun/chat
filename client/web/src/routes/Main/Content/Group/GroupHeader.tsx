@@ -23,7 +23,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = React.memo((props) => {
     PERMISSION.core.invite,
   ]);
 
-  const { handleShowGroupDetail, handleInviteUser, handleQuitGroup } =
+  const { handleShowGroupDetail, handleInviteUser, handleQuitGroup} =
     useGroupHeaderAction(groupId);
 
   if (_isNil(groupInfo)) {

@@ -61,7 +61,6 @@ export const ImageUploadPreviewer: React.FC<ImageUploadPreviewerProps> =
     const handleLoad = useCallback(
       (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
         const target = e.currentTarget;
-
         imageSizeRef.current = {
           width: target.naturalWidth,
           height: target.naturalHeight,

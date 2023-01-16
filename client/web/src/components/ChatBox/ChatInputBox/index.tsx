@@ -5,6 +5,7 @@ import { ChatInputAddon } from './Addon';
 import { ClipboardHelper } from './clipboard-helper';
 import { ChatInputActionContext } from './context';
 import { uploadMessageImage } from './utils';
+import { uploadMessageFile } from './utils';
 import { ChatInputBoxInput } from './input';
 import {
   getCachedUserInfo,
@@ -65,6 +66,19 @@ export const ChatInputBox: React.FC<ChatInputBoxProps> = React.memo((props) => {
             getMessageTextDecorators().image(url, { width, height })
           );
         });
+      }
+      else{
+        //上传文件
+        const fd = helper.hasFile();
+        if(fd)
+        {
+          e.preventDefault();
+          uploadMessageFile(fd).then(({url}) => {
+            props.onSendMsg(
+              ':open_file_folder:'+url
+            );
+          });
+        }
       }
     },
     [props.onSendMsg]
